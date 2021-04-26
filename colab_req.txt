@@ -1,7 +1,7 @@
 # This file may be used to create an environment using:
 # $ conda create --name <env> --file <this file>
 # platform: linux-64
-absl-py====0.11.0====pypi_0
+absl-py==0.11.0==pypi_0
 aquvitae==0.1.7==pypi_0
 argon2-cffi==20.1.0==py38h27cfd23_1
 async_generator==1.10==pyhd3eb1b0_0
