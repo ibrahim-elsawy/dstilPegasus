@@ -57,7 +57,7 @@ class DistilMLMRunner(dl.Runner):
         gc.collect()
         torch.cuda.empty_cache()
         self.output = OrderedDict()
-#         self.output["attention_mask"] = s_attention_mask
+        self.output["attention_mask"] = batch['decode_ids']
         self.output["t_hidden_states"] = t_hidden_states
         self.output["s_hidden_states"] = s_hidden_states
         self.output["s_logits"] = s_logits
