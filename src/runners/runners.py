@@ -11,14 +11,14 @@ class DistilMLMRunner(dl.Runner):
     
     
     def shift_tokens_right(input_ids, pad_token_id):
-    """Shift input ids one token to the right, and wrap the last non pad token (usually <eos>)."""
-    prev_output_tokens = input_ids.clone()
-    #print(pad_token_id, input_ids)
-    x= (input_ids.ne(pad_token_id).sum(dim=1) - 1)
-    index_of_eos = x.unsqueeze(-1)
-    prev_output_tokens[:, 0] = input_ids.gather(1, index_of_eos).squeeze()
-    prev_output_tokens[:, 1:] = input_ids[:, :-1]
-    return prev_output_tokens
+        """Shift input ids one token to the right, and wrap the last non pad token (usually <eos>)."""
+        prev_output_tokens = input_ids.clone()
+        #print(pad_token_id, input_ids)
+        x= (input_ids.ne(pad_token_id).sum(dim=1) - 1)
+        index_of_eos = x.unsqueeze(-1)
+        prev_output_tokens[:, 0] = input_ids.gather(1, index_of_eos).squeeze()
+        prev_output_tokens[:, 1:] = input_ids[:, :-1]
+        return prev_output_tokens
     
     
     def _handle_batch(self, batch: Dict[str, torch.Tensor]):
