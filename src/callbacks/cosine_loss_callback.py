@@ -95,6 +95,7 @@ class CosineLossCallback(MetricCallback):
         mask = attention_mask.unsqueeze(-1).expand_as(
             s_hidden_states
         )  # (bs, seq_length, dim)
+        mask = mask.ge(0.5)
         assert s_hidden_states.size() == t_hidden_states.size()
         dim = s_hidden_states.size(-1)
 
