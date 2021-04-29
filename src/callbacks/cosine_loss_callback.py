@@ -116,6 +116,6 @@ class CosineLossCallback(MetricCallback):
             1
         )  # (bs * seq_length,)
         loss_cos = self._criterion(
-            s_hidden_states, t_hidden_states, target
+            s_hidden_states_slct, t_hidden_states_slct, target
         )
         return loss_cos
