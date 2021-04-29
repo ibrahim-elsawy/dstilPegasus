@@ -64,24 +64,18 @@ class KLDivLossCallback(MetricCallback):
         Returns:
             KL loss
         """
-        #FIXME
-        #we didn't use attention mask on the logits as we thought encoder and decoder 
-        # handle and remove the extra padding of each word
-        # mask = attention_mask.unsqueeze(-1).expand_as(s_logits)
-        # # (bs, seq_lenth, voc_size)
-        # s_logits_slct = torch.masked_select(s_logits, mask)
-        # # (bs * seq_length * voc_size) modulo the 1s in mask
-        # s_logits_slct = s_logits_slct.view(-1, s_logits.size(-1))
-        # # (bs * seq_length, voc_size) modulo the 1s in mask
-        # t_logits_slct = torch.masked_select(t_logits, mask)
-        # # (bs * seq_length * voc_size) modulo the 1s in mask
-        # t_logits_slct = t_logits_slct.view(-1, s_logits.size(-1))
-        # # (bs * seq_length, voc_size) modulo the 1s in mask
-        loss_kl = (
+        sel_mask = attention_mask[:, :, None].expand_as(s_logits)
+        vocab_size = s_logits.size(-1)
+        s_logits_slct = torch.masked_select(s_logits, sel_mask)  # (bs * seq_length * voc_size) modulo the 1s in mask
+        t_logits_slct = torch.masked_select(t_logits, sel_mask)  # (bs * seq_length * voc_size) modulo the 1s in mask
+        s_logits_slct = s_logits_slct.view(-1, vocab_size)  # (bs * seq_length, voc_size) modulo the 1s in mask
+        t_logits_slct = t_logits_slct.view(-1, vocab_size)  # (bs * seq_length, voc_size) modulo the 1s in mask
+        assert t_logits_slct.size() == s_logits_slct.size()
+        loss_ce = (
             self._criterion(
-                F.log_softmax(s_logits / self.temperature, dim=-1),
-                F.softmax(t_logits / self.temperature, dim=-1),
+                F.log_softmax(s_logits_slct / self.temperature, dim=-1),
+                F.softmax(t_logits_slct / self.temperature, dim=-1),
             )
-            * self.temperature ** 2
+            * (self.temperature) ** 2
         )
         return loss_kl
