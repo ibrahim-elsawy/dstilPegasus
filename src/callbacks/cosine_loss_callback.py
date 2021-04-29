@@ -92,8 +92,26 @@ class CosineLossCallback(MetricCallback):
         # # t_hidden_states_slct = t_hidden_states_slct.view(
         # #     -1, dim
         # # )  # (bs * seq_length, dim)
+        mask = attention_mask.unsqueeze(-1).expand_as(
+            s_hidden_states
+        )  # (bs, seq_length, dim)
+        assert s_hidden_states.size() == t_hidden_states.size()
+        dim = s_hidden_states.size(-1)
 
-        target = s_hidden_states.new(s_hidden_states.size(0), s_hidden_states.size(2)).fill_(
+        s_hidden_states_slct = torch.masked_select(
+            s_hidden_states, mask
+        )  # (bs * seq_length * dim)
+        s_hidden_states_slct = s_hidden_states_slct.view(
+            -1, dim
+        )  # (bs * seq_length, dim)
+        t_hidden_states_slct = torch.masked_select(
+            t_hidden_states, mask
+        )  # (bs * seq_length * dim)
+        t_hidden_states_slct = t_hidden_states_slct.view(
+            -1, dim
+        )  # (bs * seq_length, dim)
+
+        target = s_hidden_states_slct.new(s_hidden_states_slct.size(0)).fill_(
             1
         )  # (bs * seq_length,)
         loss_cos = self._criterion(
