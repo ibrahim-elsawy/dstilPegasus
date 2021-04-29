@@ -65,6 +65,7 @@ class KLDivLossCallback(MetricCallback):
             KL loss
         """
         sel_mask = attention_mask[:, :, None].expand_as(s_logits)
+        sel_mask = sel_mask.ge(0.5)
         vocab_size = s_logits.size(-1)
         s_logits_slct = torch.masked_select(s_logits, sel_mask)  # (bs * seq_length * voc_size) modulo the 1s in mask
         t_logits_slct = torch.masked_select(t_logits, sel_mask)  # (bs * seq_length * voc_size) modulo the 1s in mask
