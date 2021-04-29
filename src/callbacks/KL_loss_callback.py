@@ -72,7 +72,7 @@ class KLDivLossCallback(MetricCallback):
         s_logits_slct = s_logits_slct.view(-1, vocab_size)  # (bs * seq_length, voc_size) modulo the 1s in mask
         t_logits_slct = t_logits_slct.view(-1, vocab_size)  # (bs * seq_length, voc_size) modulo the 1s in mask
         assert t_logits_slct.size() == s_logits_slct.size()
-        loss_ce = (
+        loss_kl = (
             self._criterion(
                 F.log_softmax(s_logits_slct / self.temperature, dim=-1),
                 F.softmax(t_logits_slct / self.temperature, dim=-1),
