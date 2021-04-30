@@ -74,5 +74,12 @@ class MSELossCallback(MetricCallback):
         # # (bs * seq_length * voc_size) modulo the 1s in mask
         # t_logits_slct = t_logits_slct.view(-1, s_logits.size(-1))
         # # (bs * seq_length, voc_size) modulo the 1s in mask
-        loss_mse = self._criterion(s_logits, t_logits)
+        sel_mask = attention_mask[:, :, None].expand_as(s_logits)
+        sel_mask = sel_mask.ge(0.5)
+        vocab_size = s_logits.size(-1)
+        s_logits_slct = torch.masked_select(s_logits, sel_mask)  # (bs * seq_length * voc_size) modulo the 1s in mask
+        t_logits_slct = torch.masked_select(t_logits, sel_mask)  # (bs * seq_length * voc_size) modulo the 1s in mask
+        s_logits_slct = s_logits_slct.view(-1, vocab_size)  # (bs * seq_length, voc_size) modulo the 1s in mask
+        t_logits_slct = t_logits_slct.view(-1, vocab_size)  # (bs * seq_length, voc_size) modulo the 1s in mask
+        loss_mse = self._criterion(s_logits_slct, t_logits_slct)
         return loss_mse
