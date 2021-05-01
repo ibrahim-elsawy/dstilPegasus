@@ -60,7 +60,7 @@ class DistilMLMRunner(dl.Runner):
         max_length = batch["decode_ids"].shape[-1]
         genLabel = teacher.generate(batch["input_ids"], attention_mask=batch["attention_mask"], max_length=max_length, num_beams=1, num_return_sequences=1)
         size = genLabel.shape
-        genlabel = torch.cat((genLabel, torch.zeros(size=(size[0], max_length - size[1]))), dim=1)
+        genlabel = torch.cat((genLabel, torch.cuda.LongTesnor(size=(size[0], max_length - size[1])).fill_(0)), dim=1)
         self.output = OrderedDict()
         self.output["attention_mask"] = shift_tokens_right(batch['decode_mask'], 0)
         self.output["t_hidden_states"] = t_hidden_states
