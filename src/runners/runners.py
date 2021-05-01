@@ -58,7 +58,7 @@ class DistilMLMRunner(dl.Runner):
         gc.collect()
         torch.cuda.empty_cache()
         max_length = batch["decode_ids"].shape[-1]
-        genLabel = teacher.generate(**batch, max_length=max_length, num_beams=1, num_return_sequences=1)
+        genLabel = teacher.generate(batch["input_ids"], attention_mask=batch["attention_mask"], max_length=max_length, num_beams=1, num_return_sequences=1)
         size = genLabel.shape
         genlabel = torch.cat((genLabel, torch.zeros(size=(size[0], max_length - size[1]))), dim=1)
         self.output = OrderedDict()
