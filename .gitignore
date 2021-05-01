@@ -5,3 +5,4 @@ teacher_model.pt
 *.pyc
 *.json
 *.pt
+generate.py
