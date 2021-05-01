@@ -4,3 +4,4 @@ st_3dec_3enc_2.pt
 teacher_model.pt
 *.pyc
 *.json
+*.pt
