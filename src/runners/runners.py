@@ -54,15 +54,22 @@ class DistilMLMRunner(dl.Runner):
         s_logits = studentOutput.logits
         s_hidden_states = studentOutput.encoder_last_hidden_state
 #         s_attention_mask = studentOutput.decoder_attentions
+        del teacherOutput
         gc.collect()
         torch.cuda.empty_cache()
+        max_length = batch["decode_ids"].shape[-1]
+        genLabel = teacher.generate(**batch, max_length=max_length, num_beams=1, num_return_sequences=1)
+        size = genLabel.shape
+        genlabel = torch.cat((genLabel, torch.zeros(size=(size[0], max_length - size[1]))), dim=1)
         self.output = OrderedDict()
         self.output["attention_mask"] = shift_tokens_right(batch['decode_mask'], 0)
         self.output["t_hidden_states"] = t_hidden_states
         self.output["s_hidden_states"] = s_hidden_states
         self.output["s_logits"] = s_logits
         self.output["t_logits"] = t_logits
-        self.output["target"] = batch["decode_ids"]
+        # self.output["target"] = batch["decode_ids"]
+        self.output["target"] = genLabel
+        del genLabel
         #FIXME
         teacher.to('cpu')
         # student.to('cpu')
