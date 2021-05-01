@@ -16,7 +16,6 @@ def shift_tokens_right(input_ids, pad_token_id):
         prev_output_tokens[:, 0] = input_ids.gather(1, index_of_eos).squeeze()
         prev_output_tokens[:, 1:] = input_ids[:, :-1]
         return prev_output_tokens
-   
 class DistilMLMRunner(dl.Runner):
     """Simplified huggingface Distiller wrapped with catalyst"""
     
@@ -60,7 +59,7 @@ class DistilMLMRunner(dl.Runner):
         max_length = batch["decode_ids"].shape[-1]
         genLabel = teacher.generate(batch["input_ids"], attention_mask=batch["attention_mask"], max_length=max_length, num_beams=1, num_return_sequences=1)
         size = genLabel.shape
-        genlabel = torch.cat((genLabel, torch.cuda.LongTensor(size=(size[0], max_length - size[1])).fill_(0)), dim=1)
+        genLabel = torch.cat((genLabel, torch.cuda.LongTensor(size=(size[0], max_length - size[1])).fill_(0)), dim=1)
         self.output = OrderedDict()
         self.output["attention_mask"] = shift_tokens_right(batch['decode_mask'], 0)
         self.output["t_hidden_states"] = t_hidden_states

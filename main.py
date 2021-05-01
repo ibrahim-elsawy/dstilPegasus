@@ -29,11 +29,12 @@ from typing import Dict, List
 from datasets import load_dataset
 import datasets
 from datasets import Dataset
-import os 
 
 
-train_dataset = datasets.load_from_disk("./xsumtrainDataset_1")
-valid_dataset = datasets.load_from_disk("./xsumvalidDataset_1")
+# train_dataset = datasets.load_from_disk("./xsumtrainDataset_1")
+# valid_dataset = datasets.load_from_disk("./xsumvalidDataset_1")
+train_dataset = datasets.load_from_disk('./trainDataset')
+valid_dataset = datasets.load_from_disk('./validDataset')
 teacher = torch.load('teacher_model.pt', map_location=torch.device('cuda')).to('cuda')
 student = torch.load('st_3dec_3enc_2.pt', map_location=torch.device('cuda')).to('cuda')
 # student = torch.load('trained_student.pt', map_location=torch.device('cuda')).to('cuda')
