@@ -62,6 +62,7 @@ class DistilMLMRunner(dl.Runner):
         self.output["s_hidden_states"] = s_hidden_states
         self.output["s_logits"] = s_logits
         self.output["t_logits"] = t_logits
+        self.output["target"] = batch["decode_ids"]
         #FIXME
         teacher.to('cpu')
         # student.to('cpu')
