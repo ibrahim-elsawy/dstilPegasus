@@ -3,6 +3,7 @@ from .KL_loss_callback import KLDivLossCallback
 from .masked_language_model_callback import MaskedLanguageModelCallback
 from .mse_loss_callback import MSELossCallback
 from .perplexity_callback import PerplexityMetricCallbackDistillation
+from .label_smoothed_callback import SmoothingLossCallback
 
 __all__ = [
     "CosineLossCallback",
@@ -10,4 +11,5 @@ __all__ = [
     "KLDivLossCallback",
     "MSELossCallback",
     "PerplexityMetricCallbackDistillation",
+    "SmoothingLossCallback",
 ]
