@@ -18,7 +18,7 @@ class SmoothingLossCallback(MetricCallback):
         self,
         input_key: Union[str, List[str], Dict[str, str]] = None,
         output_key: Union[str, List[str], Dict[str, str]] = None,
-        prefix: str = "cosine_loss",
+        prefix: str = "label_smooth_loss",
         multiplier: float = 1.0,
         **metric_kwargs,
     ):
