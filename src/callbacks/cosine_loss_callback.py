@@ -38,9 +38,12 @@ class CosineLossCallback(MetricCallback):
         """
         if output_key is None:
             output_key = [
+                #"attention_mask",
+                "input_attention_mask",
                 "t_hidden_states",
                 "s_hidden_states",
-                "attention_mask",
+                #"dt_hidden_states",
+                #"ds_hidden_states",
             ]
         super().__init__(
             prefix=prefix,
@@ -54,10 +57,13 @@ class CosineLossCallback(MetricCallback):
 
     def metric_fn(
         self,
+        #attention_mask: torch.Tensor,
+        input_attention_mask: torch.Tensor,
         t_hidden_states: torch.Tensor,
         s_hidden_states: torch.Tensor,
-        attention_mask: torch.Tensor,
-    ) -> torch.Tensor:
+        #dt_hidden_states: torch.Tensor,
+        #ds_hidden_states: torch.Tensor,
+    ):
         """
         Computes cosine loss on given hidden states
         Args:
@@ -92,6 +98,9 @@ class CosineLossCallback(MetricCallback):
         # # t_hidden_states_slct = t_hidden_states_slct.view(
         # #     -1, dim
         # # )  # (bs * seq_length, dim)
+        attention_mask = input_attention_mask
+        t_hidden_states = t_hidden_states[-1]
+        s_hidden_states = s_hidden_states[-1]
         mask = attention_mask.unsqueeze(-1).expand_as(
             s_hidden_states
         )  # (bs, seq_length, dim)
