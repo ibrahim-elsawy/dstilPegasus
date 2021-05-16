@@ -56,21 +56,21 @@ model = torch.nn.ModuleDict({"teacher": teacher, "student": student})
 
 
 
-train_data = Dataset.from_dict(train_dataset[0 : 50000])
-valid_data = Dataset.from_dict(valid_dataset[0 : 5000])
+# train_data = Dataset.from_dict(train_dataset)
+# valid_data = Dataset.from_dict(valid_dataset)
 
-train_data.set_format('torch', columns=['input_ids', 'attention_mask','decode_ids','decode_mask'], device='cuda')
-valid_data.set_format('torch', columns=['input_ids', 'attention_mask','decode_ids','decode_mask'], device='cuda')
+train_dataset.set_format('torch', columns=['input_ids', 'attention_mask'], device='cuda')
+valid_dataset .set_format('torch', columns=['input_ids', 'attention_mask'], device='cuda')
 
 
 
 
 train_dataloader = DataLoader(
     #train_dataset['train']
-    train_data, batch_size=16
+    train_dataset, batch_size=16
 )
 valid_dataloader = DataLoader(
-    valid_data, batch_size=16
+    valid_dataset, batch_size=16
 )
 loaders = {"train": train_dataloader, "valid": valid_dataloader}
 

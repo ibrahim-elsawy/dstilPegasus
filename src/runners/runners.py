@@ -27,7 +27,14 @@ class DistilMLMRunner(dl.Runner):
             )
         else:
             teacher, student = self.model["teacher"], self.model["student"]
-
+        if(self.epoch == 2 and self.loader_batch_step == 1 and self.stage_name == "train"):
+                torch.save({ 
+                        'epoch': self.epoch,
+                        'model_state_dict': student.state_dict(),
+                        'optimizer_state_dict': self.optimizer.state_dict(),
+                        'loss': self.epoch_metrics,
+                }, 'trained_student2.pt')
+                
         teacher.to('cuda')
         student.to('cuda')
         teacher.eval()  # manually set teacher model to eval mode
@@ -44,31 +51,44 @@ class DistilMLMRunner(dl.Runner):
         batch['decode_ids'] = shift_tokens_right(batch['decode_ids'], 0)
         batch['decode_ids'] = batch['decode_ids'].to('cuda')
         with torch.no_grad():
-            teacherOutput =teacher( torch.cuda.LongTensor( batch["input_ids"]), batch["attention_mask"], batch['decode_ids'], output_attentions=True)
+            teacherOutput =teacher( torch.cuda.LongTensor( batch["input_ids"]), batch["attention_mask"], batch['decode_ids'], output_attentions=True, output_hidden_states=True)
             t_logits = teacherOutput.logits
-            t_hidden_states = teacherOutput.encoder_last_hidden_state 
+            t_hidden_states = teacherOutput.encoder_hidden_states 
 #             t_attention_mask = teacherOutput.decoder_attentions
         
-        studentOutput =student( torch.cuda.LongTensor( batch["input_ids"]), batch["attention_mask"], batch['decode_ids'], output_attentions=True)
+        studentOutput =student( torch.cuda.LongTensor( batch["input_ids"]), batch["attention_mask"], batch['decode_ids'], output_attentions=True, output_hidden_states=True)
         s_logits = studentOutput.logits
-        s_hidden_states = studentOutput.encoder_last_hidden_state
+        s_hidden_states = studentOutput.encoder_hidden_states
+        dt_hidden_states = teacherOutput.decoder_hidden_states
+        ds_hidden_states = studentOutput.decoder_hidden_states
 #         s_attention_mask = studentOutput.decoder_attentions
         del teacherOutput
         gc.collect()
         torch.cuda.empty_cache()
-        max_length = batch["decode_ids"].shape[-1]
-        genLabel = teacher.generate(batch["input_ids"], attention_mask=batch["attention_mask"], max_length=max_length, num_beams=1, num_return_sequences=1)
-        size = genLabel.shape
-        genLabel = torch.cat((genLabel, torch.cuda.LongTensor(size=(size[0], max_length - size[1])).fill_(0)), dim=1)
+        ###################### to use the model outputs
+        #max_length = batch["decode_ids"].shape[-1]
+        #genLabel = teacher.generate(batch["input_ids"], attention_mask=batch["attention_mask"], max_length=max_length, num_beams=1, num_return_sequences=1)
+        #size = genLabel.shape
+        #genLabel = torch.cat((genLabel, torch.cuda.LongTensor(size=(size[0], max_length - size[1])).fill_(0)), dim=1)
+        ###########################
         self.output = OrderedDict()
         self.output["attention_mask"] = shift_tokens_right(batch['decode_mask'], 0)
+        self.output["input_attention_mask"] = batch["attention_mask"]
         self.output["t_hidden_states"] = t_hidden_states
         self.output["s_hidden_states"] = s_hidden_states
+
+
+
+        #FIXME
+        self.output["dt_hidden_states"] = dt_hidden_states
+        self.output["ds_hidden_states"] = ds_hidden_states
+
+
         self.output["s_logits"] = s_logits
         self.output["t_logits"] = t_logits
-        # self.output["target"] = batch["decode_ids"]
-        self.output["target"] = genLabel
-        del genLabel
+        self.output["target"] = batch["decode_ids"]
+        #self.output["target"] = genLabel
+        #del genLabel
         #FIXME
         teacher.to('cpu')
         # student.to('cpu')
