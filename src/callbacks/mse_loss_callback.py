@@ -111,16 +111,16 @@ class MSELossCallback(MetricCallback):
         # s_logits_slct = s_logits_slct.view(-1, vocab_size)  # (bs * seq_length, voc_size) modulo the 1s in mask
         # t_logits_slct = t_logits_slct.view(-1, vocab_size)  # (bs * seq_length, voc_size) modulo the 1s in mask
         # mask has False at padding_idx
-        normalize_hidden = False
+        normalize_hidden = True
         e_layer_ids = 3 #number of encoder layers in student
         d_layer_ids = 3 #number of decoder layers in student
         teacher_encoder_layers = 16 # number of encoder layers in teacher 
         teacher_decoder_layers = 16 # number of decoder layers in teacher 
         e_matches = get_layers_to_supervise(
-                    n_student=len(e_layer_ids), n_teacher=teacher_encoder_layers
+                    n_student=e_layer_ids, n_teacher=teacher_encoder_layers
                 )
         d_matches = get_layers_to_supervise(
-                    n_student=len(d_layer_ids), n_teacher=teacher_decoder_layers
+                    n_student=d_layer_ids, n_teacher=teacher_decoder_layers
                 )
         hid_loss_enc = calc_hidden_loss(
                     input_attention_mask,
