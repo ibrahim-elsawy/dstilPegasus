@@ -91,5 +91,5 @@ class DistilMLMRunner(dl.Runner):
         #del genLabel
         #FIXME
         teacher.to('cpu')
-        student.to('cpu')
+        #student.to('cpu')
         torch.cuda.empty_cache()
