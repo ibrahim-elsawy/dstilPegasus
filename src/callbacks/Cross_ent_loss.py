@@ -67,5 +67,5 @@ class CrossentropylossCallback(MetricCallback):
         """
         pad_token_id = 0
         loss_fct = torch.nn.CrossEntropyLoss(ignore_index=pad_token_id)
-        student_lm_loss = loss_fct(s_logits.view(-1, s_logits.shape[-1]), target.view(-1))
+        loss = loss_fct(s_logits.view(-1, s_logits.shape[-1]), target.view(-1))
         return loss
