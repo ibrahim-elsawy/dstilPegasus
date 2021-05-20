@@ -65,7 +65,7 @@ class CrossentropylossCallback(MetricCallback):
         Returns:
             label smothing loss
         """
-        pad_token_id = 0
-        loss_fct = torch.nn.CrossEntropyLoss(ignore_index=pad_token_id)
+        pad_token_id = -100
+        loss_fct = torch.nn.CrossEntropyLoss(ignore_index=-100)
         loss = loss_fct(s_logits.view(-1, s_logits.shape[-1]), target.view(-1))
         return loss
