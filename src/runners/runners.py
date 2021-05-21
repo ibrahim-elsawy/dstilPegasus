@@ -16,7 +16,7 @@ import gc
 #         prev_output_tokens[:, 0] = input_ids.gather(1, index_of_eos).squeeze()
 #         prev_output_tokens[:, 1:] = input_ids[:, :-1]
 #         return prev_output_tokens
-def shift_tokens_right(input_ids: torch.Tensor, pad_token_id: int, decoder_start_token_id: int):
+def shift_tokens_right(input_ids: torch.Tensor, pad_token_id = 0, decoder_start_token_id = 0):
     """
     Shift input ids one token to the right.
     """
