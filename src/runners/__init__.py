@@ -3,4 +3,5 @@ from .runners_finetune import DistilMLMRunnerFT
 
 __all__ = [
     "DistilMLMRunner",
+    "DistilMLMRunnerFT"
 ]
