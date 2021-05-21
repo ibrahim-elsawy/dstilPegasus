@@ -9,7 +9,7 @@ LAYERS_TO_SUPERVISE = {
     # maps  num layers in student -> which teacher layers to copy.
     6: {1: [5], 2: [3, 5], 3: [1, 4, 5], 4: [1, 2, 4, 5]},
     12: {1: [11], 2: [5, 11], 3: [3, 7, 11], 6: [1, 3, 5, 8, 10, 11]},
-    16: {1: [15], 3:[0, 8, 15], 4: [4, 9, 12, 15], 8: [1, 3, 5, 7, 9, 11, 13, 15],9: [0, 1, 3, 5, 7, 9, 11, 13, 15]},
+    16: {1: [15], 3:[0, 8, 15], 4: [0,5,10,15], 8: [1, 3, 5, 7, 9, 11, 13, 15],9: [0, 1, 3, 5, 7, 9, 11, 13, 15]},
 }
 
 def get_layers_to_supervise(n_student, n_teacher) -> List[int]:
@@ -116,19 +116,19 @@ class MSELossCallback(MetricCallback):
         d_layer_ids = len(ds_hidden_states)-1 #number of decoder layers in student
         teacher_encoder_layers = 16 # number of encoder layers in teacher 
         teacher_decoder_layers = 16 # number of decoder layers in teacher 
-        e_matches = get_layers_to_supervise(
-                    n_student=e_layer_ids, n_teacher=teacher_encoder_layers
-                )
+        #e_matches = get_layers_to_supervise(
+        #            n_student=e_layer_ids, n_teacher=teacher_encoder_layers
+        #        )
         d_matches = get_layers_to_supervise(
                     n_student=d_layer_ids, n_teacher=teacher_decoder_layers
                 )
-        hid_loss_enc = calc_hidden_loss(
-                    input_attention_mask,
-                    s_hidden_states,
-                    t_hidden_states,
-                    e_matches,
-                    normalize_hidden=normalize_hidden,
-                )
+        #hid_loss_enc = calc_hidden_loss(
+        #            input_attention_mask,
+        #            s_hidden_states,
+        #            t_hidden_states,
+        #            e_matches,
+        #            normalize_hidden=normalize_hidden,
+        #        )
         hid_loss_dec = calc_hidden_loss(
                 attention_mask,
                 ds_hidden_states,
@@ -136,4 +136,5 @@ class MSELossCallback(MetricCallback):
                 d_matches,
                 normalize_hidden=normalize_hidden,
             )
-        return hid_loss_enc + hid_loss_dec
+        #return hid_loss_enc + hid_loss_dec
+        return hid_loss_dec
