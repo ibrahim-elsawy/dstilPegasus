@@ -7,3 +7,4 @@ teacher_model.pt
 *.pt
 trainDataset/
 validDataset/
+pegasus_xsum/
