@@ -27,7 +27,7 @@ class DistilMLMRunnerFT(dl.Runner):
     def _handle_batch(self, batch: Dict[str, torch.Tensor]):
         if check_ddp_wrapped(self.model):
              student = (
-                self.model.module["teacher"],
+                #self.model.module["teacher"],
                 self.model.module["student"],
             )
         else:
