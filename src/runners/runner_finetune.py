@@ -63,4 +63,7 @@ class DistilMLMRunnerFT(dl.Runner):
 
         self.output["s_logits"] = s_logits
         self.output["target"] = batch["decode_ids"]
+        del student
+        del batch
+        del studentOutput
         torch.cuda.empty_cache()

@@ -2,8 +2,6 @@ from typing import Dict, List, Union
 
 from catalyst.core import MetricCallback
 import torch
-from torch import nn
-from torch.nn import functional as F
 
 
 
@@ -66,6 +64,9 @@ class CrossentropylossCallback(MetricCallback):
             label smothing loss
         """
         pad_token_id = -100
-        loss_fct = torch.nn.CrossEntropyLoss(ignore_index=-100)
+        loss_fct = torch.nn.CrossEntropyLoss(ignore_index=pad_token_id)
         loss = loss_fct(s_logits.view(-1, s_logits.shape[-1]), target.view(-1))
+        del target
+        del s_logits
+        torch.cuda.empty_cache()
         return loss
