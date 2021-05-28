@@ -41,7 +41,7 @@ class DistilMLMRunner(dl.Runner):
             )
         else:
             teacher, student = self.model["teacher"], self.model["student"]
-        if(self.epoch == 2 and self.loader_batch_step == 1 and self.stage_name == "train"):
+        if(self.epoch == 1 and self.loader_batch_step == 1 and self.stage_name == "valid"):
                 torch.save({ 
                         'epoch': self.epoch,
                         'model_state_dict': student.state_dict(),
