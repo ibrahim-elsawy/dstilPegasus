@@ -21,7 +21,7 @@ def shift_tokens_right(input_ids: torch.Tensor, pad_token_id = 0, decoder_start_
 
     return shifted_input_ids
     
-class DistilMLMRunnerFT(dl.SupervisedConfigRunner):
+class DistilMLMRunnerFT(dl.SupervisedRunner):
     """Simplified huggingface Distiller wrapped with catalyst"""
     
     def _handle_batch(self, batch: Dict[str, torch.Tensor]):
