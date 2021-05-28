@@ -32,17 +32,18 @@ class DistilMLMRunnerFT(dl.Runner):
             )
         else:
             student = self.model["student"]
-        if(self.epoch == 2 and self.loader_batch_step == 1 and self.stage_name == "train"):
+        if(self.epoch == 1 and self.loader_batch_step == 1 and self.stage_name == "valid"):
                 torch.save({ 
                         'epoch': self.epoch,
                         'model_state_dict': student.state_dict(),
                         'optimizer_state_dict': self.optimizer.state_dict(),
                         'loss': self.epoch_metrics,
-                }, 'trained_student2.pt')
+                }, 'trained_student.pt')
              
         student.to('cuda')
         batch["input_ids"] = batch["input_ids"].to('cuda')
         batch["attention_mask"] = batch["attention_mask"].to('cuda')
+        targets_without_shift = batch['decode_ids']
         batch['decode_ids'] = shift_tokens_right(batch['decode_ids'], 0)
         batch['decode_ids'] = batch['decode_ids'].to('cuda')        
         studentOutput =student( torch.cuda.LongTensor( batch["input_ids"]), batch["attention_mask"], batch['decode_ids'], output_attentions=True, output_hidden_states=True)
@@ -62,7 +63,7 @@ class DistilMLMRunnerFT(dl.Runner):
 
 
         self.output["s_logits"] = s_logits
-        self.output["target"] = batch["decode_ids"]
+        self.output["target"] = targets_without_shift
         del student
         del batch
         del studentOutput
