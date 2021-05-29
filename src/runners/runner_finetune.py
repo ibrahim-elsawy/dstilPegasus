@@ -25,6 +25,7 @@ class DistilMLMRunnerFT(dl.Runner):
     """Simplified huggingface Distiller wrapped with catalyst"""
     
     def _handle_batch(self, batch: Dict[str, torch.Tensor]):
+        print(self.stage_name)
         if check_ddp_wrapped(self.model):
              student = (
                 #self.model.module["teacher"],
