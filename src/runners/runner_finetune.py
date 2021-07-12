@@ -54,17 +54,19 @@ class DistilMLMRunnerFT(dl.Runner):
         gc.collect()
         torch.cuda.empty_cache()
         self.output = OrderedDict()
-        self.output["attention_mask"] = shift_tokens_right(batch['decode_mask'], 0)
-        self.output["input_attention_mask"] = batch["attention_mask"]
-        self.output["s_hidden_states"] = s_hidden_states
+#         self.output["attention_mask"] = shift_tokens_right(batch['decode_mask'], 0)
+#         self.output["input_attention_mask"] = batch["attention_mask"]
+#         self.output["s_hidden_states"] = s_hidden_states
 
 
 
-        self.output["ds_hidden_states"] = ds_hidden_states
+#         self.output["ds_hidden_states"] = ds_hidden_states
 
 
         self.output["s_logits"] = s_logits
         self.output["target"] = targets_without_shift
+        self.output["epoch"] = self.epoch
+        self.output["i"] = self.loader_batch_step
         del student
         del batch
         del studentOutput
