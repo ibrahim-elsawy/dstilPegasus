@@ -2,6 +2,8 @@ from typing import Dict, List, Union
 
 from catalyst.core import MetricCallback
 import torch
+from torch.utils.tensorboard import SummaryWriter
+
 
 
 
@@ -40,7 +42,10 @@ class CrossentropylossCallback(MetricCallback):
             output_key = [
                 "target",
                 "s_logits",
+                "epoch",
+                "i",
             ]
+        self.writer = SummaryWriter()
         super().__init__(
             prefix=prefix,
             input_key=input_key,
@@ -54,6 +59,8 @@ class CrossentropylossCallback(MetricCallback):
         self,
         target: torch.Tensor,
         s_logits: torch.Tensor,
+        epoch,
+        i,
     ) -> torch.Tensor:
         """
         Computes label smoothing loss on given hidden states
@@ -66,6 +73,7 @@ class CrossentropylossCallback(MetricCallback):
         pad_token_id = -100
         loss_fct = torch.nn.CrossEntropyLoss(ignore_index=pad_token_id)
         loss = loss_fct(s_logits.view(-1, s_logits.shape[-1]), target.view(-1))
+        self.writer.add_scalar("Loss/train", loss, i+(50000*(epoch-1)))
         del target
         del s_logits
         torch.cuda.empty_cache()
