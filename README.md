@@ -1,9 +1,19 @@
 # dstilPegasus
 ***The main scripts run on google colab or google cloud are the following***
 
-> [gcp1.ipynb](https://github.com/ibrahim-elsawy/dstilPegasus/blob/main/gcp1.ipynb)   
+> [gcp1.ipynb](https://github.com/ibrahim-elsawy/dstilPegasus/blob/main/gcp1.ipynb)
+   
 > [train_on_pl_or_orig_xsum_.ipynb](https://github.com/ibrahim-elsawy/dstilPegasus/blob/main/train_on_pl_or_orig_xsum_.ipynb)
 
+> [Training Shrink and Fit using Custom Trainer.ipynb](https://github.com/ibrahim-elsawy/dstilPegasus/blob/main/Shrink%20and%20Fit%20Notebooks/Training%20Shrink%20and%20Fit%20using%20Custom%20Trainer.ipynb)
+
+> [Training Shrink and Fit using Custom Training Loops with Losses wieghting.ipynb](https://github.com/ibrahim-elsawy/dstilPegasus/blob/main/Shrink%20and%20Fit%20Notebooks/Training%20Shrink%20and%20Fit%20using%20Custom%20Training%20Loops%20with%20Losses%20wieghting.ipynb)
+
+> [Training Shrink and Fit using Custom Training Loops with Losses wieghting.ipynb](https://github.com/ibrahim-elsawy/dstilPegasus/blob/main/Shrink%20and%20Fit%20Notebooks/Training%20Shrink%20and%20Fit%20using%20Custom%20Training%20Loops%20with%20Losses%20wieghting.ipynb)
+
+> [Training Shrink and Fit using Deepspeed and Seq2SeqTrainer.ipynb](https://github.com/ibrahim-elsawy/dstilPegasus/blob/main/Shrink%20and%20Fit%20Notebooks/Training%20Shrink%20and%20Fit%20using%20Deepspeed%20and%20Seq2SeqTrainer.ipynb)
+
+> [RougeCalculation.ipynb](https://github.com/ibrahim-elsawy/dstilPegasus/blob/main/Shrink%20and%20Fit%20Notebooks/RougeCalculation.ipynb)
 
 ***The scripts used in preprocessing and tokenizing data then storing it are***
 
